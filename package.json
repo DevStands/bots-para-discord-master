@@ -1,18 +1,35 @@
 {
-  "name": "marcar-bot",
+  "name": "bot-discord-testes",
   "version": "1.0.0",
-  "description": "Bot do Discord para marcar todos os usuários",
-  "main": "index.js",
+  "description": "Testes",
+  "main": "global.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node global.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevFirex/bot-discord-testes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/DevFirex/bot-discord-testes/issues"
+  },
+  "homepage": "https://github.com/DevFirex/bot-discord-testes#readme",
   "dependencies": {
-    "@discordjs/opus": "^0.10.0",
-    "@discordjs/voice": "^0.19.0",
-    "@snazzah/davey": "^0.1.8",
-    "discord.js": "^14.14.1",
-    "dotenv": "^16.3.1",
+    "@discordjs/voice": "^0.18.0",
+    "discord.js": "^14.17.3",
+    "dotenv": "^16.4.7",
+    "ffmpeg-static": "^5.3.0",
+    "libsodium-wrappers": "^0.7.15",
     "moment": "^2.30.1",
-    "opusscript": "^0.0.8"
+    "opusscript": "^0.1.1",
+    "sodium-native": "^4.3.3"
+  },
+  "overrides": {
+    "undici": "^6.23.0"
   }
 }

@@ -1,29 +1,43 @@
-// comandos/falarcomando.js (Código Otimizado)
-
-const { SlashCommandBuilder, ApplicationCommandOptionType } = require('discord.js');
+const { SlashCommandBuilder, PermissionsBitField, ChannelType, MessageFlags } = require('discord.js');
 
 module.exports = {
-    // Usa SlashCommandBuilder para melhor compatibilidade, se global.js estiver usando
-    data: new SlashCommandBuilder() 
-        .setName('falar')
-        .setDescription('Faz o bot dizer a mensagem que você escrever.')
-        .addStringOption(option => 
-            option.setName('mensagem')
-                .setDescription('A mensagem que o bot deve enviar.')
-                .setRequired(true)
-        ),
-    
-    async execute(interaction) {
-        
-        const mensagemDoUsuario = interaction.options.getString('mensagem');
-        
-        // Confirma o recebimento de forma privada (ephemeral)
-		await interaction.reply({ 
-			content: `✅ Mensagem enviada: "${mensagemDoUsuario}"`, 
-			ephemeral: true 
-		});
+    data: new SlashCommandBuilder()
+        .setName('falar')
+        .setDescription('Faz o bot falar em um canal específico.')
+        .addStringOption(option => 
+            option.setName('mensagem')
+                .setDescription('A mensagem a ser enviada')
+                .setRequired(true))
+        .addChannelOption(option => 
+            option.setName('canal')
+                .setDescription('O canal onde a mensagem será enviada')
+                .addChannelTypes(ChannelType.GuildText)
+                .setRequired(false)),
 
-        // Faz o bot enviar a mensagem no canal onde o comando foi usado
-        await interaction.channel.send(mensagemDoUsuario);
-    },
+    async execute(interaction) {
+        // Verifica permissão de Administrador
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
+            return interaction.reply({ 
+                content: '❌ Você não tem permissão para usar este comando.', 
+                flags: [MessageFlags.Ephemeral] 
+            });
+        }
+
+        const mensagem = interaction.options.getString('mensagem');
+        const canal = interaction.options.getChannel('canal') || interaction.channel;
+
+        try {
+            await canal.send(mensagem);
+            await interaction.reply({ 
+                content: `✅ Mensagem enviada em ${canal}!`, 
+                flags: [MessageFlags.Ephemeral] 
+            });
+        } catch (error) {
+            console.error(error);
+            await interaction.reply({ 
+                content: '❌ Erro ao enviar mensagem. Verifique minhas permissões no canal.', 
+                flags: [MessageFlags.Ephemeral] 
+            });
+        }
+    },
 };
